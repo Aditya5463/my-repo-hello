@@ -66,10 +66,10 @@ import joblib
 
 model = None
 label_encoder = None
-MODEL_DIR = os.path.join(basedir, "model.pkl")
+MODEL_DIR = os.path.join(basedir, "model")
 os.makedirs(MODEL_DIR, exist_ok=True)
 
-model_path = os.path.join(MODEL_DIR, "model")
+model_path = os.path.join(MODEL_DIR, "model.pkl")
 encoder_path = os.path.join(MODEL_DIR, "label_encoder.pkl")
 
 if os.path.exists(model_path) and os.path.exists(encoder_path):
@@ -361,10 +361,10 @@ import joblib
 
 model = None
 label_encoder = None
-MODEL_DIR = os.path.join(basedir, "model.pkl")
+MODEL_DIR = os.path.join(basedir, "model")
 os.makedirs(MODEL_DIR, exist_ok=True)
 
-model_path = os.path.join(MODEL_DIR, "model")
+model_path = os.path.join(MODEL_DIR, "model.pkl")
 encoder_path = os.path.join(MODEL_DIR, "label_encoder.pkl")
 
 if os.path.exists(model_path) and os.path.exists(encoder_path):
