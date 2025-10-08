@@ -352,31 +352,6 @@ def generate_otp():
 # ==============================================================================
 # LOAD MACHINE LEARNING MODEL AND ENCODER
 # ==============================================================================
-import joblib
-
-model = None
-label_encoder = None
-MODEL_DIR = os.path.join(basedir, "model")
-os.makedirs(MODEL_DIR, exist_ok=True)
-
-model_path = os.path.join(MODEL_DIR, "model.pkl")
-encoder_path = os.path.join(MODEL_DIR, "label_encoder.pkl")
-
-print(f"📂 Loading ML model from: {model_path}")
-print(f"📂 Loading label encoder from: {encoder_path}")
-
-if os.path.exists(model_path) and os.path.exists(encoder_path):
-    try:
-        model = joblib.load(model_path)
-        label_encoder = joblib.load(encoder_path)
-        print("✅ Machine Learning model and encoder loaded successfully.")
-    except Exception as e:
-        model = None
-        label_encoder = None
-        print(f"❌ Error loading ML model or encoder: {e}")
-else:
-    print("⚠️ Model or encoder file not found. Please run train.py first.")
-# ==============================================================================
 # USER LOADER AND DECORATORS
 # ==============================================================================
 @login_manager.user_loader
