@@ -66,7 +66,7 @@ import joblib
 
 model = None
 label_encoder = None
-MODEL_DIR = os.path.join(basedir, "model")
+MODEL_DIR = os.path.join(basedir, "model.pkl")
 os.makedirs(MODEL_DIR, exist_ok=True)
 
 model_path = os.path.join(MODEL_DIR, "model")
@@ -361,7 +361,7 @@ import joblib
 
 model = None
 label_encoder = None
-MODEL_DIR = os.path.join(basedir, "model")
+MODEL_DIR = os.path.join(basedir, "model.pkl")
 os.makedirs(MODEL_DIR, exist_ok=True)
 
 model_path = os.path.join(MODEL_DIR, "model")
