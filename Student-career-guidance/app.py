@@ -72,16 +72,20 @@ os.makedirs(MODEL_DIR, exist_ok=True)
 model_path = os.path.join(MODEL_DIR, "model.pkl")
 encoder_path = os.path.join(MODEL_DIR, "label_encoder.pkl")
 
+print(f"📂 Loading ML model from: {model_path}")
+print(f"📂 Loading label encoder from: {encoder_path}")
+
 if os.path.exists(model_path) and os.path.exists(encoder_path):
     try:
         model = joblib.load(model_path)
         label_encoder = joblib.load(encoder_path)
-        print("✅ Machine Learning model and encoder loaded successfully from model/ directory.")
+        print("✅ Machine Learning model and encoder loaded successfully.")
     except Exception as e:
-        print(f"⚠️ Could not load ML model. Error: {e}")
+        model = None
+        label_encoder = None
+        print(f"❌ Error loading ML model or encoder: {e}")
 else:
-    print("⚠️ No model or encoder found in model/. Please run train.py first.")
-
+    print("⚠️ Model or encoder file not found. Please run train.py first.")
 # ==============================================================================
 # USER LOADER AND DECORATORS
 # ==============================================================================
@@ -260,15 +264,6 @@ def dashboard():
 def profile():
     return render_template('main/profile.html', user=current_user)
 
-@app.route('/assessment')
-@login_required
-def assessment():
-    if model is None:
-        flash("The prediction model is not available. Please contact admin.", "danger")
-        return redirect(url_for('dashboard'))
-    form_fields = getattr(model, "feature_names_in_", [])
-    return render_template('main/assessment.html', fields=form_fields)
-
 @app.route('/process_assessment', methods=['POST'])
 @login_required
 def process_assessment():
@@ -367,16 +362,20 @@ os.makedirs(MODEL_DIR, exist_ok=True)
 model_path = os.path.join(MODEL_DIR, "model.pkl")
 encoder_path = os.path.join(MODEL_DIR, "label_encoder.pkl")
 
+print(f"📂 Loading ML model from: {model_path}")
+print(f"📂 Loading label encoder from: {encoder_path}")
+
 if os.path.exists(model_path) and os.path.exists(encoder_path):
     try:
         model = joblib.load(model_path)
         label_encoder = joblib.load(encoder_path)
-        print("✅ Machine Learning model and encoder loaded successfully from model/ directory.")
+        print("✅ Machine Learning model and encoder loaded successfully.")
     except Exception as e:
-        print(f"⚠️ Could not load ML model. Error: {e}")
+        model = None
+        label_encoder = None
+        print(f"❌ Error loading ML model or encoder: {e}")
 else:
-    print("⚠️ No model or encoder found in model/. Please run train.py first.")
-
+    print("⚠️ Model or encoder file not found. Please run train.py first.")
 # ==============================================================================
 # USER LOADER AND DECORATORS
 # ==============================================================================
@@ -436,6 +435,15 @@ def signup():
     flash('Account created! You can now log in.', 'success')
     return redirect(url_for('login'))
 
+@app.route('/assessment')
+@login_required
+def assessment():
+    if model is None:
+        flash("The prediction model is not available. Please contact admin.", "danger")
+        return redirect(url_for('dashboard'))
+    form_fields = getattr(model, "feature_names_in_", [])
+    return render_template('main/assessment.html', fields=form_fields)
+    
 # Email OTP login
 @app.route('/login_email', methods=['GET', 'POST'])
 def login_email():
