@@ -482,18 +482,11 @@ import os
 from smtplib import SMTP, SMTPException
 from email.message import EmailMessage
 
+import threading
+
 def send_email(to_email, subject, otp=None, purpose="login"):
-    """
-    Sends a professional-looking email.
-    
-    :param to_email: Recipient email
-    :param subject: Email subject
-    :param otp: Optional OTP to include
-    :param purpose: Reason for sending (login, reset password, etc.)
-    """
     app_name = os.getenv("APP_NAME", "Student Career Guidance")
     
-    # Construct professional email body
     if otp:
         body = f"""
 Hello,
@@ -512,22 +505,24 @@ Thank you,
     else:
         body = "Hello,\n\nThis is a notification from your application.\n\nThank you,\nTeam"
     
-    # Create EmailMessage object
     msg = EmailMessage()
     msg['Subject'] = subject
     msg['From'] = os.getenv('MAIL_USERNAME')
     msg['To'] = to_email
     msg.set_content(body)
 
-    try:
-        with SMTP(os.getenv('MAIL_SERVER'), int(os.getenv('MAIL_PORT'))) as server:
-            if os.getenv("MAIL_USE_TLS", "False").lower() == "true":
-                server.starttls()
-            server.login(os.getenv('MAIL_USERNAME'), os.getenv('MAIL_PASSWORD'))
-            server.send_message(msg)
-        print(f"✅ Email sent to {to_email}")
-    except Exception as e:
-        print(f"❌ Error sending email: {e}")
+    def send_async_email(msg):
+        try:
+            with SMTP(os.getenv('MAIL_SERVER'), int(os.getenv('MAIL_PORT'))) as server:
+                if os.getenv("MAIL_USE_TLS", "False").lower() == "true":
+                    server.starttls()
+                server.login(os.getenv('MAIL_USERNAME'), os.getenv('MAIL_PASSWORD'))
+                server.send_message(msg)
+            print(f"✅ Email sent to {to_email}")
+        except Exception as e:
+            print(f"❌ Error sending email: {e}")
+
+    threading.Thread(target=send_async_email, args=(msg,)).start()
 
 # Forgot password
 @app.route('/forgot_password', methods=['GET', 'POST'])
