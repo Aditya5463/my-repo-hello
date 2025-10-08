@@ -584,15 +584,6 @@ def dashboard():
 def profile():
     return render_template('main/profile.html', user=current_user)
 
-@app.route('/assessment')
-@login_required
-def assessment():
-    if model is None:
-        flash("The prediction model is not available. Please contact admin.", "danger")
-        return redirect(url_for('dashboard'))
-    form_fields = getattr(model, "feature_names_in_", [])
-    return render_template('main/assessment.html', fields=form_fields)
-
 @app.route('/process_assessment', methods=['POST'])
 @login_required
 def process_assessment():
